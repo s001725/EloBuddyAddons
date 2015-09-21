@@ -1,0 +1,6 @@
+C:\Users\Bryce\Desktop\Elobuddy\UnsignedYasuo.exe.config
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\UnsignedYasuo\UnsignedYasuo\obj\Debug\UnsignedYasuo.exe
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\UnsignedYasuo\UnsignedYasuo\obj\Debug\UnsignedYasuo.pdb
+C:\Users\Bryce\Desktop\Elobuddy\UnsignedYasuo.exe
+C:\Users\Bryce\Desktop\Elobuddy\UnsignedYasuo.pdb
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\UnsignedYasuo\UnsignedYasuo\obj\Debug\UnsignedYasuo.csprojResolveAssemblyReference.cache
