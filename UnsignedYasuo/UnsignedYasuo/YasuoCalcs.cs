@@ -16,13 +16,18 @@ namespace DarkRyze
         public static double Q(Obj_AI_Base target)
         {
             return yo.CalculateDamageOnUnit(target, DamageType.Physical,
-                (float)(new double[] { 20, 40, 60, 80, 100 }[Program.Q.Level] + 1 * yo.TotalAttackDamage));                  
+                (float)(new double[] { 20, 40, 60, 80, 100 }[Program.Q.Level] + 1 * yo.TotalAttackDamage));
         }
 
         public static float E(Obj_AI_Base target)
         {
             return yo.CalculateDamageOnUnit(target, DamageType.Magical,
-                (float) (new [] { 70, 90, 110, 130, 150 }[Program.E.Level] + (0.6 * yo.FlatMagicDamageMod)));                     
+                (float)(new[] { 70, 90, 110, 130, 150 }[Program.E.Level] + (0.6 * yo.FlatMagicDamageMod)));
+        }
+
+        public static float IgniteDamage(Obj_AI_Base target)
+        {
+            return (10 + (4 * Program._Player.Level)) - ((target.HPRegenRate / 2) * 5);
         }
         
         public static Vector2 GetDashingEnd(Obj_AI_Base target)

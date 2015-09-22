@@ -431,6 +431,16 @@ namespace DarkRyze
                         item.Cast();
                 }
             }
+
+            if (Program.Ignite != null
+                &&_Player.Distance(unit) <= 550
+                && unit.Type == GameObjectType.AIHeroClient
+                && unit.IsEnemy
+                && unit.Health <= YasuoCalcs.IgniteDamage(unit))//get correct value
+            {
+                Program.Ignite.Cast(unit);
+            }
+                
         }
 
         public static Spell.Skillshot GetQType()

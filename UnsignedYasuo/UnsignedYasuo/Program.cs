@@ -15,6 +15,7 @@ namespace DarkRyze
         public static Spell.SpellBase W;
         public static Spell.Targeted E;
         public static Spell.Active R;
+        public static Spell.Targeted Ignite;
         public static AIHeroClient _Player { get { return ObjectManager.Player; } }
         public static int Mana { get { return (int) _Player.Mana; } }
         private static void Main(string[] args)
@@ -79,6 +80,14 @@ namespace DarkRyze
             DrawingsMenu.AddGroupLabel("Drawings Settings");
             DrawingsMenu.Add("DQ", new CheckBox("Draw Q"));
             DrawingsMenu.Add("DE", new CheckBox("Draw E"));
+
+            Spellbook spell = _Player.Spellbook;
+            SpellDataInst Sum1 = spell.GetSpell(SpellSlot.Summoner1);
+            SpellDataInst Sum2 = spell.GetSpell(SpellSlot.Summoner2);
+            if (Sum1.Name == "Ignite")
+                Ignite = new Spell.Targeted(SpellSlot.Summoner1, 600);
+            else if (Sum2.Name == "Ignite")
+                Ignite = new Spell.Targeted(SpellSlot.Summoner2, 600);
 
             Game.OnTick += Game_OnTick;
             Drawing.OnDraw += Drawing_OnDraw;
