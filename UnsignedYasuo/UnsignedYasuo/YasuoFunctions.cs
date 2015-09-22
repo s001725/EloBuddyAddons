@@ -69,7 +69,6 @@ namespace DarkRyze
                 && !a.HasBuff("YasuoDashWrapper")
                 && a.Health <= (YasuoCalcs.Q(a) + YasuoCalcs.E(a))).FirstOrDefault();
             }
-
         }
 
         public static AIHeroClient _Player { get { return ObjectManager.Player; } }
@@ -198,7 +197,7 @@ namespace DarkRyze
                                 Program.Q.Cast(target.Position);
                         }
                     }
-                    UseItemsAndIgnite(target);
+                    //UseItemsAndIgnite(target);
                 }
             }
 
@@ -212,7 +211,7 @@ namespace DarkRyze
 
             if (Program.LaneClear["LCI"].Cast<CheckBox>().CurrentValue)
             {
-                Obj_AI_Minion minion = (Obj_AI_Minion)GetEnemy(2000, GameObjectType.obj_AI_Minion);
+                Obj_AI_Minion minion = (Obj_AI_Minion)GetEnemy(400, GameObjectType.obj_AI_Minion);
 
                 if (minion != null)
                     UseItemsAndIgnite(minion);
