@@ -16,6 +16,62 @@ namespace DarkRyze
     {
         public static bool dashing;
 
+        public enum AttackSpell
+        {
+            Q,
+            E,
+            EQ
+        };
+
+        //get enemy non last hit)
+        public static Obj_AI_Base GetEnemy(float range, GameObjectType type)
+        {
+            return ObjectManager.Get<Obj_AI_Base>().Where(a => a.IsEnemy
+            && a.Type == type
+            && a.Distance(_Player) <= range
+            && !a.IsDead
+            && !a.IsInvulnerable
+            && a.IsValidTarget(range)
+            && a.Health <= YasuoCalcs.Q(a)).FirstOrDefault();
+        }
+        
+        public static Obj_AI_Base GetEnemy(GameObjectType type, AttackSpell spell)
+        {
+            if(spell == AttackSpell.E)
+            {
+                return ObjectManager.Get<Obj_AI_Base>().Where(a => a.IsEnemy
+                && a.Type == type
+                && a.Distance(_Player) <= Program.E.Range
+                && !a.IsDead
+                && !a.IsInvulnerable
+                && a.IsValidTarget(Program.E.Range)
+                && !a.HasBuff("YasuoDashWrapper")
+                && a.Health <= YasuoCalcs.E(a)).FirstOrDefault();
+            }
+            else if (spell == AttackSpell.Q)
+            {
+                return ObjectManager.Get<Obj_AI_Base>().Where(a => a.IsEnemy
+                && a.Type == type
+                && a.Distance(_Player) <= Program.Q.Range
+                && !a.IsDead
+                && !a.IsInvulnerable
+                && a.IsValidTarget(Program.Q.Range)
+                && a.Health <= YasuoCalcs.Q(a)).FirstOrDefault();
+            }
+            else//eq
+            {
+                return ObjectManager.Get<Obj_AI_Base>().Where(a => a.IsEnemy
+                && a.Type == type
+                && a.Distance(_Player) <= Program.E.Range
+                && !a.IsDead
+                && !a.IsInvulnerable
+                && a.IsValidTarget(Program.E.Range)
+                && !a.HasBuff("YasuoDashWrapper")
+                && a.Health <= (YasuoCalcs.Q(a) + YasuoCalcs.E(a))).FirstOrDefault();
+            }
+
+        }
+
         public static AIHeroClient _Player { get { return ObjectManager.Player; } }
         
         public static void LastHit()
@@ -79,17 +135,10 @@ namespace DarkRyze
 
             if (QCHECK && QREADY && !dashing && !_Player.IsDashing())
             {
-                Obj_AI_Minion minion = ObjectManager.Get<Obj_AI_Minion>().Where(a => a.IsEnemy
-                && a.Distance(_Player) <= Program.Q.Range
-                && !a.HasBuff("YasuoDashWrapper")
-                && !a.IsDead
-                && a.IsValidTarget()
-                && a.Health <= YasuoCalcs.Q(a)).FirstOrDefault();
+                Obj_AI_Minion minion = (Obj_AI_Minion)GetEnemy(GameObjectType.obj_AI_Minion, AttackSpell.Q);
 
-                if (minion != null && !minion.IsDead && !minion.IsInvulnerable)
-                {
+                if (minion != null)
                     Program.Q.Cast(minion.Position);
-                }
             }
             dashing = false;
         }
@@ -155,35 +204,25 @@ namespace DarkRyze
 
             if (QCHECK && QREADY && !_Player.IsDashing() && !dashing)
             {
-                Obj_AI_Minion minion = ObjectManager.Get<Obj_AI_Minion>().Where(a => a.IsEnemy
-                && !a.IsDead
-                && a.IsValidTarget()
-                && a.Distance(_Player) <= Program.Q.Range).FirstOrDefault();
-                
-                if (minion != null && !minion.IsDead && !minion.IsInvulnerable)
-                {
+                Obj_AI_Minion minion = (Obj_AI_Minion)GetEnemy(Program.Q.Range, GameObjectType.obj_AI_Minion);
+
+                if (minion != null)
                     Program.Q.Cast(minion.Position);
-                }
             }
 
             if (Program.LaneClear["LCI"].Cast<CheckBox>().CurrentValue)
             {
-                Obj_AI_Minion enemy = ObjectManager.Get<Obj_AI_Minion>().Where(a => a.IsEnemy
-                && !a.IsDead
-                && a.IsValidTarget()).FirstOrDefault();
+                Obj_AI_Minion minion = (Obj_AI_Minion)GetEnemy(2000, GameObjectType.obj_AI_Minion);
 
-                if(enemy != null)
-                    UseItemsAndIgnite(enemy);
+                if (minion != null)
+                    UseItemsAndIgnite(minion);
             }
 
             if (Orbwalker.CanAutoAttack)
             {
-                Obj_AI_Minion minion = ObjectManager.Get<Obj_AI_Minion>().Where(a => a.IsEnemy
-                && !a.IsDead
-                && a.IsValidTarget()
-                && a.Distance(_Player) <= _Player.GetAutoAttackRange()).FirstOrDefault();
+                Obj_AI_Minion minion = (Obj_AI_Minion)GetEnemy(_Player.GetAutoAttackRange(), GameObjectType.obj_AI_Minion);
 
-                if(minion != null)
+                if (minion != null)
                     Orbwalker.ForcedTarget = minion;
             }
             dashing = false;
@@ -232,11 +271,7 @@ namespace DarkRyze
 
             if (ECHECK && EREADY)
             {
-                AIHeroClient enemy = ObjectManager.Get<AIHeroClient>().Where(a => a.IsEnemy
-                && a.Distance(_Player) <= Program.E.Range
-                && !a.IsDead
-                && a.IsValidTarget()
-                && !a.HasBuff("YasuoDashWrapper")).FirstOrDefault();
+                AIHeroClient enemy = (AIHeroClient)GetEnemy(Program.E.Range, GameObjectType.AIHeroClient);
 
                 if (enemy != null)
                 {
@@ -249,15 +284,10 @@ namespace DarkRyze
 
             if (QCHECK && QREADY && !dashing && !_Player.IsDashing())
             {
-                AIHeroClient enemy = ObjectManager.Get<AIHeroClient>().Where(a => a.IsEnemy
-                && !a.IsDead
-                && a.IsValidTarget()
-                && a.Distance(_Player) <= Program.Q.Range).FirstOrDefault();
+                AIHeroClient enemy = (AIHeroClient)GetEnemy(Program.Q.Range, GameObjectType.AIHeroClient);
 
                 if (enemy != null)
-                {
                     Program.Q.Cast(enemy.Position);
-                }
             }
             dashing = false;
         }
@@ -290,10 +320,7 @@ namespace DarkRyze
 
             if (ECHECK && EREADY)
             {
-                AIHeroClient enemy = ObjectManager.Get<AIHeroClient>().Where(a => a.IsEnemy
-                && !a.IsDead
-                && a.IsValidTarget()
-                && !a.HasBuff("YasuoDashWrapper")).FirstOrDefault();
+                AIHeroClient enemy = (AIHeroClient)GetEnemy(Program.E.Range, GameObjectType.AIHeroClient);
 
                 if (enemy != null
                     && Extensions.Distance(YasuoCalcs.GetDashingEnd(enemy), enemy) <= _Player.GetAutoAttackRange()
@@ -331,22 +358,15 @@ namespace DarkRyze
 
             if (QCHECK && QREADY && !dashing && !_Player.IsDashing())
             {
-                AIHeroClient enemy = ObjectManager.Get<AIHeroClient>().Where(a => a.IsEnemy
-                && !a.IsDead
-                && a.IsValidTarget()
-                && a.Distance(_Player) <= Program.Q.Range).FirstOrDefault();
+                AIHeroClient enemy = (AIHeroClient)GetEnemy(Program.Q.Range, GameObjectType.AIHeroClient);
 
                 if (enemy != null)
-                {
                     Program.Q.Cast(enemy.Position);
-                }
             }
 
             if (Program.ComboMenu["IU"].Cast<CheckBox>().CurrentValue == true)
             {
-                AIHeroClient enemy = ObjectManager.Get<AIHeroClient>().Where(a => a.IsEnemy
-                && !a.IsDead
-                && a.IsValidTarget()).FirstOrDefault();
+                AIHeroClient enemy = (AIHeroClient)GetEnemy(2500, GameObjectType.AIHeroClient);
 
                 if (enemy != null)
                     UseItemsAndIgnite(enemy);
@@ -354,10 +374,7 @@ namespace DarkRyze
 
             if (Orbwalker.CanAutoAttack)
             {
-                AIHeroClient enemy = ObjectManager.Get<AIHeroClient>().Where(a => a.IsEnemy
-                && !a.IsDead
-                && a.IsValidTarget()
-                && a.Distance(_Player) <= _Player.GetAutoAttackRange()).FirstOrDefault();
+                AIHeroClient enemy = (AIHeroClient)GetEnemy(_Player.GetAutoAttackRange(), GameObjectType.AIHeroClient);
 
                 if (enemy != null)
                     Orbwalker.ForcedTarget = enemy;
@@ -384,9 +401,7 @@ namespace DarkRyze
             }
 
             if(furthestMinion != null && Program.E.IsReady())
-            {
                 Program.E.Cast(furthestMinion);
-            }
         }
 
         public static void UseItemsAndIgnite(Obj_AI_Base unit)
