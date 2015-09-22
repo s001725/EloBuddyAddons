@@ -31,8 +31,7 @@ namespace DarkRyze
             && a.Distance(_Player) <= range
             && !a.IsDead
             && !a.IsInvulnerable
-            && a.IsValidTarget(range)
-            && a.Health <= YasuoCalcs.Q(a)).FirstOrDefault();
+            && a.IsValidTarget(range)).FirstOrDefault();
         }
         
         public static Obj_AI_Base GetEnemy(GameObjectType type, AttackSpell spell)
@@ -46,7 +45,7 @@ namespace DarkRyze
                 && !a.IsInvulnerable
                 && a.IsValidTarget(Program.E.Range)
                 && !a.HasBuff("YasuoDashWrapper")
-                && a.Health <= YasuoCalcs.E(a)).FirstOrDefault();
+                && a.Health <= (YasuoCalcs.E(a) - 25)).FirstOrDefault();
             }
             else if (spell == AttackSpell.Q)
             {
@@ -56,7 +55,7 @@ namespace DarkRyze
                 && !a.IsDead
                 && !a.IsInvulnerable
                 && a.IsValidTarget(Program.Q.Range)
-                && a.Health <= YasuoCalcs.Q(a)).FirstOrDefault();
+                && a.Health <= (YasuoCalcs.Q(a) - 25)).FirstOrDefault();
             }
             else//eq
             {
@@ -67,7 +66,7 @@ namespace DarkRyze
                 && !a.IsInvulnerable
                 && a.IsValidTarget(Program.E.Range)
                 && !a.HasBuff("YasuoDashWrapper")
-                && a.Health <= (YasuoCalcs.Q(a) + YasuoCalcs.E(a))).FirstOrDefault();
+                && a.Health <= (YasuoCalcs.Q(a) + YasuoCalcs.E(a) - 25)).FirstOrDefault();
             }
         }
 
