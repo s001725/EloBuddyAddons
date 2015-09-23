@@ -339,9 +339,9 @@ namespace DarkRyze
                 AIHeroClient enemy = (AIHeroClient)GetEnemy(Program.E.Range, GameObjectType.AIHeroClient);
 
                 if (enemy != null
-                    && Extensions.Distance(YasuoCalcs.GetDashingEnd(enemy), enemy) <= _Player.GetAutoAttackRange()
+                    && Extensions.Distance(YasuoCalcs.GetDashingEnd(enemy), enemy) <= _Player.GetAutoAttackRange()//wont e unless in AA range after
                     && enemy.Distance(_Player) <= Program.E.Range
-                    && enemy.Distance(_Player) >= _Player.GetAutoAttackRange())//wont e unless in AA range after
+                    && enemy.Distance(_Player) >= _Player.GetAutoAttackRange())
                 {
                     Program.E.Cast(enemy);
                     dashing = true;
@@ -354,16 +354,17 @@ namespace DarkRyze
                     Obj_AI_Minion furthestMinion = null;
                     foreach (Obj_AI_Minion minion in ObjectManager.Get<Obj_AI_Minion>())
                     {
-                        if (furthestMinion == null &&
-                            Extensions.Distance(YasuoCalcs.GetDashingEnd(minion), enemy) <= _Player.Distance(enemy) &&
-                            minion.IsEnemy &&
-                            minion.Distance(_Player) <= Program.E.Range)
+                        if (furthestMinion == null
+                            && Extensions.Distance(YasuoCalcs.GetDashingEnd(minion), enemy) <= _Player.Distance(enemy)
+                            && minion.IsEnemy
+                            && !minion.HasBuff("YasuoDashWrapper")
+                            && minion.Distance(_Player) <= Program.E.Range)
                             furthestMinion = minion;
-
-                        if (_Player.IsFacing(minion) &&
-                            Extensions.Distance(YasuoCalcs.GetDashingEnd(minion), enemy) <= _Player.Distance(enemy) &&
-                            minion.IsEnemy &&
-                            minion.Distance(_Player) <= Program.E.Range)
+                        else if (_Player.IsFacing(minion)
+                            && Extensions.Distance(YasuoCalcs.GetDashingEnd(minion), enemy) <= _Player.Distance(enemy)
+                            && minion.IsEnemy
+                            && !minion.HasBuff("YasuoDashWrapper")
+                            && minion.Distance(_Player) <= Program.E.Range)
                             furthestMinion = minion;
                     }
 
@@ -377,7 +378,12 @@ namespace DarkRyze
                 AIHeroClient enemy = (AIHeroClient)GetEnemy(Program.Q.Range, GameObjectType.AIHeroClient);
 
                 if (enemy != null)
-                    Program.Q.Cast(enemy.Position);
+                {
+                    if (Program.Q.Range == 1000 && Program.Q.GetPrediction(enemy).HitChance >= HitChance.Medium)
+                        Program.Q.Cast(enemy.Position);
+                    else if (Program.Q.Range == 475)
+                        Program.Q.Cast(enemy.Position);
+                }
             }
 
             if (Program.ComboMenu["IU"].Cast<CheckBox>().CurrentValue == true)
