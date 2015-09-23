@@ -1,0 +1,9 @@
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\EloBuddyHelper\EloBuddyHelper\bin\Debug\EloBuddyHelper.exe.config
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\EloBuddyHelper\EloBuddyHelper\bin\Debug\EloBuddyHelper.exe
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\EloBuddyHelper\EloBuddyHelper\bin\Debug\EloBuddyHelper.pdb
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\EloBuddyHelper\EloBuddyHelper\bin\Debug\EloBuddy.dll
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\EloBuddyHelper\EloBuddyHelper\bin\Debug\EloBuddy.SDK.dll
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\EloBuddyHelper\EloBuddyHelper\bin\Debug\SharpDX.dll
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\EloBuddyHelper\EloBuddyHelper\obj\Debug\EloBuddyHelper.csprojResolveAssemblyReference.cache
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\EloBuddyHelper\EloBuddyHelper\obj\Debug\EloBuddyHelper.exe
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\EloBuddyHelper\EloBuddyHelper\obj\Debug\EloBuddyHelper.pdb
