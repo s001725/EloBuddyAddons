@@ -11,18 +11,18 @@ namespace DarkRyze
     internal class Program
     {
         public static Menu ComboMenu, DrawingsMenu, KSMenu, LaneClear, LastHit, Harass, menu;
-        public static Spell.Skillshot Q { get { return YasuoFunctions.GetQType(); } }
+        public static Spell.Skillshot Q;
         public static Spell.SpellBase W;
         public static Spell.Targeted E;
         public static Spell.Active R;
         public static Spell.Targeted Ignite;
         public static AIHeroClient _Player { get { return ObjectManager.Player; } }
-        public static int Mana { get { return (int) _Player.Mana; } }
+        public static int Mana { get { return (int)_Player.Mana; } }
         private static void Main(string[] args)
         {
             Loading.OnLoadingComplete += Loading_OnLoadingComplete;
         }
-        
+
         private static void Loading_OnLoadingComplete(EventArgs args)
         {
             if (Player.Instance.ChampionName != "Yasuo")
@@ -30,15 +30,16 @@ namespace DarkRyze
 
             //Hacks.AntiAFK = true;
             Bootstrap.Init(null);
-            
+
+            Q = new Spell.Skillshot(SpellSlot.Q, 475, SkillShotType.Linear);
             //W = new Spell.Skillshot(SpellSlot.W, 400, SkillShotType.Linear);
             E = new Spell.Targeted(SpellSlot.E, 475);
             R = new Spell.Active(SpellSlot.R);// range 1200
-            
+
             menu = MainMenu.AddMenu("Unsigned Yasuo", "UnsignedYasuo");
 
             ComboMenu = menu.AddSubMenu("Combo", "combomenu");
-            
+
             ComboMenu.AddGroupLabel("Combo Settings");
             ComboMenu.Add("QU", new CheckBox("Use Q"));
             ComboMenu.Add("EU", new CheckBox("Use E"));
@@ -91,6 +92,8 @@ namespace DarkRyze
 
             Game.OnTick += Game_OnTick;
             Drawing.OnDraw += Drawing_OnDraw;
+            Obj_AI_Base.OnBuffGain += OnBuffGain;
+            Obj_AI_Base.OnBuffLose += OnBuffLose;
         }
 
         private static void Drawing_OnDraw(EventArgs args)
@@ -135,6 +138,17 @@ namespace DarkRyze
             {
                 YasuoFunctions.Flee();
             }
+        }
+
+        static void OnBuffGain(Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs buff)
+        {
+            if (sender.IsMe && buff.Buff.Name == "yasuoq3w")
+                Q =  new Spell.Skillshot(SpellSlot.Q, 1000, SkillShotType.Linear);
+        }
+        static void OnBuffLose(Obj_AI_Base sender, Obj_AI_BaseBuffLoseEventArgs buff)
+        {
+            if (sender.IsMe && buff.Buff.Name == "yasuoq3w")
+                Q =  new Spell.Skillshot(SpellSlot.Q, 475, SkillShotType.Linear);
         }
     }
 }
