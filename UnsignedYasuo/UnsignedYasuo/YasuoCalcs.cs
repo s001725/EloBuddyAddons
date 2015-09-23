@@ -7,7 +7,7 @@ using EloBuddy;
 using EloBuddy.SDK;
 using SharpDX;
 
-namespace DarkRyze
+namespace UnsignedYasuo
 {
 
     class YasuoCalcs
@@ -16,7 +16,7 @@ namespace DarkRyze
         public static double Q(Obj_AI_Base target)
         {
             return yo.CalculateDamageOnUnit(target, DamageType.Physical,
-                (float)(new double[] { 20, 40, 60, 80, 100 }[Program.Q.Level] + 1 * yo.TotalAttackDamage));
+                (float)(new double[] { 20, 40, 60, 80, 100 }[Program.Q.Level] + yo.TotalAttackDamage));
         }
 
         public static float E(Obj_AI_Base target)

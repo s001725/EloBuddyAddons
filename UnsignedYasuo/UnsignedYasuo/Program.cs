@@ -6,7 +6,7 @@ using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
 
-namespace DarkRyze
+namespace UnsignedYasuo
 {
     internal class Program
     {
@@ -17,7 +17,6 @@ namespace DarkRyze
         public static Spell.Active R;
         public static Spell.Targeted Ignite;
         public static AIHeroClient _Player { get { return ObjectManager.Player; } }
-        public static int Mana { get { return (int)_Player.Mana; } }
         private static void Main(string[] args)
         {
             Loading.OnLoadingComplete += Loading_OnLoadingComplete;

@@ -10,7 +10,7 @@ using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
 
-namespace DarkRyze
+namespace UnsignedYasuo
 {
     class YasuoFunctions
     {
@@ -77,7 +77,6 @@ namespace DarkRyze
                 && !a.IsDead
                 && !a.IsInvulnerable
                 && a.IsValidTarget(Program.Ignite.Range)
-                && !a.HasBuff("YasuoDashWrapper")
                 && a.Health <= (YasuoCalcs.Ignite(a) - 25)).FirstOrDefault();
             }
         }
@@ -119,7 +118,7 @@ namespace DarkRyze
                     }
                 }
 
-                if (target != null && !target.IsDead && !target.IsInvulnerable)
+                if (target != null)
                 {
                     if (EUNDERTURRET)
                     {
