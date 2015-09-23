@@ -20,7 +20,8 @@ namespace DarkRyze
         {
             Q,
             E,
-            EQ
+            EQ,
+            Ignite
         };
 
         //get enemy non last hit)
@@ -57,7 +58,7 @@ namespace DarkRyze
                 && a.IsValidTarget(Program.Q.Range)
                 && a.Health <= (YasuoCalcs.Q(a) - 25)).FirstOrDefault();
             }
-            else//eq
+            else if (spell == AttackSpell.EQ)//eq
             {
                 return ObjectManager.Get<Obj_AI_Base>().Where(a => a.IsEnemy
                 && a.Type == type
@@ -67,6 +68,17 @@ namespace DarkRyze
                 && a.IsValidTarget(Program.E.Range)
                 && !a.HasBuff("YasuoDashWrapper")
                 && a.Health <= (YasuoCalcs.Q(a) + YasuoCalcs.E(a) - 25)).FirstOrDefault();
+            }
+            else//ignite
+            {
+                return ObjectManager.Get<Obj_AI_Base>().Where(a => a.IsEnemy
+                && a.Type == type
+                && a.Distance(_Player) <= Program.Ignite.Range
+                && !a.IsDead
+                && !a.IsInvulnerable
+                && a.IsValidTarget(Program.Ignite.Range)
+                && !a.HasBuff("YasuoDashWrapper")
+                && a.Health <= (YasuoCalcs.Ignite(a) - 25)).FirstOrDefault();
             }
         }
 
@@ -256,6 +268,12 @@ namespace DarkRyze
                 Program.E.Cast(target);
                 Program.Q.Cast(target.Position);
             }
+
+            var igniteEnemy = GetEnemy(GameObjectType.AIHeroClient, AttackSpell.Ignite);
+            if (Program.Ignite != null && igniteEnemy != null)//get correct value
+            {
+                Program.Ignite.Cast(igniteEnemy);
+            }
         }
         
         public static void Harrass()
@@ -431,16 +449,6 @@ namespace DarkRyze
                         item.Cast();
                 }
             }
-
-            if (Program.Ignite != null
-                &&_Player.Distance(unit) <= 550
-                && unit.Type == GameObjectType.AIHeroClient
-                && unit.IsEnemy
-                && unit.Health <= YasuoCalcs.IgniteDamage(unit))//get correct value
-            {
-                Program.Ignite.Cast(unit);
-            }
-                
         }
 
         public static Spell.Skillshot GetQType()
