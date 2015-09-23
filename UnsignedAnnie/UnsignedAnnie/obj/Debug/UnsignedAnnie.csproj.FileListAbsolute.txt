@@ -1,0 +1,9 @@
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\UnsignedAnnie\UnsignedAnnie\bin\Debug\UnsignedAnnie.exe.config
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\UnsignedAnnie\UnsignedAnnie\bin\Debug\UnsignedAnnie.exe
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\UnsignedAnnie\UnsignedAnnie\bin\Debug\UnsignedAnnie.pdb
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\UnsignedAnnie\UnsignedAnnie\bin\Debug\EloBuddy.dll
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\UnsignedAnnie\UnsignedAnnie\bin\Debug\EloBuddy.SDK.dll
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\UnsignedAnnie\UnsignedAnnie\bin\Debug\SharpDX.dll
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\UnsignedAnnie\UnsignedAnnie\obj\Debug\UnsignedAnnie.csprojResolveAssemblyReference.cache
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\UnsignedAnnie\UnsignedAnnie\obj\Debug\UnsignedAnnie.exe
+C:\Users\Bryce\Desktop\EloBuddy\My Scripts\UnsignedAnnie\UnsignedAnnie\obj\Debug\UnsignedAnnie.pdb
