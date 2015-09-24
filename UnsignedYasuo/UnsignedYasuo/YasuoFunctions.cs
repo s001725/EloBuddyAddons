@@ -46,7 +46,7 @@ namespace UnsignedYasuo
                 && !a.IsInvulnerable
                 && a.IsValidTarget(Program.E.Range)
                 && !a.HasBuff("YasuoDashWrapper")
-                && a.Health <= (YasuoCalcs.E(a) - 25)).FirstOrDefault();
+                && a.Health <= YasuoCalcs.E(a)).FirstOrDefault();
             }
             else if (spell == AttackSpell.Q)
             {
@@ -56,7 +56,7 @@ namespace UnsignedYasuo
                 && !a.IsDead
                 && !a.IsInvulnerable
                 && a.IsValidTarget(Program.Q.Range)
-                && a.Health <= (YasuoCalcs.Q(a) - 25)).FirstOrDefault();
+                && a.Health <= YasuoCalcs.Q(a)).FirstOrDefault();
             }
             else if (spell == AttackSpell.EQ)//eq
             {
@@ -67,7 +67,7 @@ namespace UnsignedYasuo
                 && !a.IsInvulnerable
                 && a.IsValidTarget(Program.E.Range)
                 && !a.HasBuff("YasuoDashWrapper")
-                && a.Health <= (YasuoCalcs.Q(a) + YasuoCalcs.E(a) - 25)).FirstOrDefault();
+                && a.Health <= (YasuoCalcs.Q(a) + YasuoCalcs.E(a))).FirstOrDefault();
             }
             else//ignite
             {
@@ -77,7 +77,7 @@ namespace UnsignedYasuo
                 && !a.IsDead
                 && !a.IsInvulnerable
                 && a.IsValidTarget(Program.Ignite.Range)
-                && a.Health <= (YasuoCalcs.Ignite(a) - 25)).FirstOrDefault();
+                && a.Health <= (YasuoCalcs.Ignite(a))).FirstOrDefault();
             }
         }
 

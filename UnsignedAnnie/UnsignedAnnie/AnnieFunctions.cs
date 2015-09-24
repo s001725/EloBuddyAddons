@@ -45,7 +45,7 @@ namespace UnsignedAnnie
                 && !a.IsDead
                 && !a.IsInvulnerable
                 && a.IsValidTarget(Program.W.Range)
-                && a.Health <= (AnnieCalcs.W(a) - 25)).FirstOrDefault();
+                && a.Health <= AnnieCalcs.W(a)).FirstOrDefault();
             }
             else if (spell == AttackSpell.Q)//q
             {
@@ -55,10 +55,12 @@ namespace UnsignedAnnie
                 && !a.IsDead
                 && !a.IsInvulnerable
                 && a.IsValidTarget(Program.Q.Range)
-                && a.Health <= (AnnieCalcs.Q(a) - 25)).FirstOrDefault();
+                && a.Health <= AnnieCalcs.Q(a)).FirstOrDefault();
             }
             else if (spell == AttackSpell.R)//r
             {
+                if (Annie.Pet == null)
+                    return null;
                 return ObjectManager.Get<Obj_AI_Base>().Where(a => a.IsEnemy
                 && a.Type == type
                 && a.Distance(Annie.Pet) <= 200
@@ -74,7 +76,7 @@ namespace UnsignedAnnie
                 && !a.IsDead
                 && !a.IsInvulnerable
                 && a.IsValidTarget(Program.Ignite.Range)
-                && a.Health <= (AnnieCalcs.Ignite(a) - 25)).FirstOrDefault();
+                && a.Health <= AnnieCalcs.Ignite(a)).FirstOrDefault();
             }
         }
 
@@ -181,7 +183,7 @@ namespace UnsignedAnnie
 
             if (QCHECK && QREADY)
             {
-                AIHeroClient enemy = (AIHeroClient)GetEnemy(Program.W.Range, GameObjectType.AIHeroClient);
+                AIHeroClient enemy = (AIHeroClient)GetEnemy(Program.Q.Range, GameObjectType.AIHeroClient);
 
                 if (enemy != null)
                     Program.Q.Cast(enemy);
