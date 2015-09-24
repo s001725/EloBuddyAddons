@@ -10,7 +10,7 @@ namespace UnsignedAnnie
 {
     internal class Program
     {
-        public static Menu ComboMenu, DrawingsMenu, SettingsMenu, LaneClear, LastHit, Harass, menu;
+        public static Menu ComboMenu, DrawingsMenu, SettingsMenu, LaneClear, LastHit, Killsteal, Harass, menu;
         public static Spell.Targeted Q;
         public static Spell.Skillshot W;
         public static Spell.Active E;
@@ -61,6 +61,14 @@ namespace UnsignedAnnie
             LastHit.AddGroupLabel("Last Hit Settings");
             LastHit.Add("LHQ", new CheckBox("Use Q"));
 
+            Killsteal = menu.AddSubMenu("Killsteal", "killstealmenu");
+            Killsteal.AddGroupLabel("Killsteal Settings");
+            Killsteal.Add("KSER", new CheckBox("Activate Killsteal"));
+            Killsteal.Add("KSQ", new CheckBox("Use Q"));
+            Killsteal.Add("KSW", new CheckBox("Use W"));
+            Killsteal.Add("KSR", new CheckBox("Use R"));
+            Killsteal.Add("KSI", new CheckBox("Use Ignite"));
+
             DrawingsMenu = menu.AddSubMenu("Drawings", "drawingsmenu");
             DrawingsMenu.AddGroupLabel("Drawings Settings");
             DrawingsMenu.Add("DQ", new CheckBox("Draw Q/W"));
@@ -70,14 +78,15 @@ namespace UnsignedAnnie
             SettingsMenu.AddGroupLabel("Combo Settings");
             SettingsMenu.Add("SS", new CheckBox("Prepare Stun at Base"));
             SettingsMenu.Add("SHM", new CheckBox("Auto-Use Mana and Health Potions"));
+            SettingsMenu.Add("ST", new CheckBox("Auto-Control Tibbers"));
 
             SpellDataInst Sum1 = _Player.Spellbook.GetSpell(SpellSlot.Summoner1);
             SpellDataInst Sum2 = _Player.Spellbook.GetSpell(SpellSlot.Summoner2);
-            if (Sum1.Name == "Ignite")
+            if (Sum1.Name == "summonerdot")
                 Ignite = new Spell.Targeted(SpellSlot.Summoner1, 600);
-            else if (Sum2.Name == "Ignite")
+            else if (Sum2.Name == "summonerdot")
                 Ignite = new Spell.Targeted(SpellSlot.Summoner2, 600);
-
+            
             Game.OnTick += Game_OnTick;
             Drawing.OnDraw += Drawing_OnDraw;
             Obj_AI_Base.OnBuffGain += OnBuffGain;
@@ -125,9 +134,17 @@ namespace UnsignedAnnie
             {
                 AnnieFunctions.StackMode();
             }
+            if (Program.Killsteal["KSER"].Cast<CheckBox>().CurrentValue)
+            {
+                AnnieFunctions.KillSteal();
+            }
             if (Program.SettingsMenu["SHM"].Cast<CheckBox>().CurrentValue)
             {
                 AnnieFunctions.UseItems();
+            }
+            if (Program.SettingsMenu["ST"].Cast<CheckBox>().CurrentValue)
+            {
+                AnnieFunctions.ControlTibbers();
             }
         }
 

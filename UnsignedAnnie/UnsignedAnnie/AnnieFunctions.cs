@@ -20,6 +20,7 @@ namespace UnsignedAnnie
             Q,
             W,
             R,
+            RPet,
             Ignite
         };
 
@@ -59,6 +60,16 @@ namespace UnsignedAnnie
             }
             else if (spell == AttackSpell.R)//r
             {
+                return ObjectManager.Get<Obj_AI_Base>().OrderBy(a => a.Health).Where(a => a.IsEnemy
+                && a.Type == type
+                && a.Distance(Annie) <= Program.R.Range
+                && !a.IsDead
+                && !a.IsInvulnerable
+                && a.IsValidTarget(Program.R.Range)
+                && a.Health <= AnnieCalcs.R(a)).FirstOrDefault();
+            }
+            else if (spell == AttackSpell.RPet)//rpet
+            {
                 if (Annie.Pet == null)
                     return null;
                 return ObjectManager.Get<Obj_AI_Base>().Where(a => a.IsEnemy
@@ -93,6 +104,53 @@ namespace UnsignedAnnie
 
                 if (enemy != null)
                     Program.Q.Cast(enemy);
+            }
+        }
+
+        public static void KillSteal()
+        {
+            bool QCHECK = Program.Killsteal["KSQ"].Cast<CheckBox>().CurrentValue;
+            bool WCHECK = Program.Killsteal["KSW"].Cast<CheckBox>().CurrentValue;
+            bool RCHECK = Program.Killsteal["KSR"].Cast<CheckBox>().CurrentValue;
+            bool ICHECK = Program.Killsteal["KSI"].Cast<CheckBox>().CurrentValue;
+            bool QREADY = Program.Q.IsReady();
+            bool WREADY = Program.W.IsReady();
+            bool RREADY = Program.R.IsReady();
+            bool IREADY = false;
+            if (Program.Ignite != null && Program.Ignite.IsReady())
+                IREADY = true;
+
+            if (ObjectManager.Get<AIHeroClient>().Where(a => a.IsEnemy && a.Distance(Annie) <= Program.R.Range).OrderBy(a => a.Health).FirstOrDefault() != null)
+            {
+                if (QCHECK && QREADY)
+                {
+                    AIHeroClient enemy = (AIHeroClient)GetEnemy(GameObjectType.AIHeroClient, AttackSpell.Q);
+
+                    if (enemy != null)
+                        Program.Q.Cast(enemy);
+                }
+                if (WCHECK && WREADY)
+                {
+                    AIHeroClient enemy = (AIHeroClient)GetEnemy(GameObjectType.AIHeroClient, AttackSpell.W);
+
+                    if (enemy != null)
+                        Program.W.Cast(enemy.Position);
+                }
+                if (RCHECK && RREADY)
+                {
+                    AIHeroClient enemy = (AIHeroClient)GetEnemy(GameObjectType.AIHeroClient, AttackSpell.R);
+
+                    if (enemy != null)
+                        Program.R.Cast(enemy.Position);
+                }
+                
+                if (ICHECK && IREADY)
+                {
+                    AIHeroClient enemy = (AIHeroClient)GetEnemy(GameObjectType.AIHeroClient, AttackSpell.Ignite);
+
+                    if (enemy != null)
+                        Program.Ignite.Cast(enemy);
+                }
             }
         }
 
@@ -213,7 +271,7 @@ namespace UnsignedAnnie
                     UseItems();
             }
 
-            if(GetEnemy(GameObjectType.AIHeroClient, AttackSpell.R) != null
+            if(GetEnemy(GameObjectType.AIHeroClient, AttackSpell.RPet) != null
                 && Program.E.IsReady())
             {
                 Program.E.Cast();
@@ -292,6 +350,47 @@ namespace UnsignedAnnie
             }
         }
         
+        public static void ControlTibbers()
+        {
+            /*if(Annie.Pet != null)
+            {
+                //try for turret
+                AIHeroClient enemy = ObjectManager.Get<AIHeroClient>()
+                    .OrderBy(a => a.Health)
+                    .Where(a => !a.IsDead
+                    && !a.IsInvulnerable
+                    && a.IsEnemy
+                    && a.Distance(Annie.Pet) <= 1500).FirstOrDefault();
+
+                if (enemy != null)
+                    Player.IssueOrder(GameObjectOrder.AutoAttackPet, enemy);
+                else
+                {
+                    Obj_AI_Turret turret = ObjectManager.Get<Obj_AI_Turret>()
+                        .OrderBy(a => a.Health)
+                        .Where(a => !a.IsDead
+                        && !a.IsInvulnerable
+                        && a.IsEnemy
+                        && a.Distance(Annie.Pet) <= 1500).FirstOrDefault();
+
+                    if (turret != null)
+                        Player.IssueOrder(GameObjectOrder.AutoAttackPet, turret);
+                    else
+                    {
+                        Obj_AI_Minion minion = ObjectManager.Get<Obj_AI_Minion>()
+                            .OrderBy(a => a.Health)
+                            .Where(a => !a.IsDead
+                            && !a.IsInvulnerable
+                            && a.IsEnemy
+                            && a.Distance(Annie.Pet) <= 1500).FirstOrDefault();
+
+                        if (minion != null)
+                            Player.IssueOrder(GameObjectOrder.AutoAttackPet, minion);
+                    }
+                }
+            }*/
+        }
+
         public static Obj_AI_Base GetBestWLocation(GameObjectType type)
         {
             int numEnemiesInRange = 0;

@@ -29,7 +29,6 @@ namespace UnsignedAnnie
             return Annie.CalculateDamageOnUnit(target, DamageType.Magical,
                 (new float[] { 0, 20, 30, 40, 50, 60 }[Program.E.Level] + (0.20f * Annie.FlatMagicDamageMod)));
         }
-
         public static float R(Obj_AI_Base target)
         {
             return Annie.CalculateDamageOnUnit(target, DamageType.Magical,
