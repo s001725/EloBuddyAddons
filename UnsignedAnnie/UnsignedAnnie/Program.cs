@@ -60,6 +60,7 @@ namespace UnsignedAnnie
             LastHit = menu.AddSubMenu("Last Hit", "lasthitmenu");
             LastHit.AddGroupLabel("Last Hit Settings");
             LastHit.Add("LHQ", new CheckBox("Use Q"));
+            LastHit.Add("LHW", new CheckBox("Use W"));
 
             Killsteal = menu.AddSubMenu("Killsteal", "killstealmenu");
             Killsteal.AddGroupLabel("Killsteal Settings");

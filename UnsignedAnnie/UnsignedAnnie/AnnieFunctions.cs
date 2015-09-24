@@ -96,14 +96,24 @@ namespace UnsignedAnnie
         public static void LastHit()
         {
             bool QCHECK = Program.LastHit["LHQ"].Cast<CheckBox>().CurrentValue;
+            bool WCHECK = Program.LastHit["LHW"].Cast<CheckBox>().CurrentValue;
             bool QREADY = Program.Q.IsReady();
-          
+            bool WREADY = Program.W.IsReady();
+
             if (QCHECK && QREADY)
             {
                 Obj_AI_Minion enemy = (Obj_AI_Minion)GetEnemy(GameObjectType.obj_AI_Minion, AttackSpell.Q);
 
                 if (enemy != null)
                     Program.Q.Cast(enemy);
+            }
+
+            if (WCHECK && WREADY)
+            {
+                Obj_AI_Minion enemy = (Obj_AI_Minion)GetEnemy(GameObjectType.obj_AI_Minion, AttackSpell.W);
+
+                if (enemy != null)
+                    Program.W.Cast(enemy.Position);
             }
         }
 
