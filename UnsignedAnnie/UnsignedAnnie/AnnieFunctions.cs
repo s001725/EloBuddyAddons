@@ -59,13 +59,12 @@ namespace UnsignedAnnie
             }
             else if (spell == AttackSpell.R)//r
             {
-                return ObjectManager.Get<Obj_AI_Base>().OrderBy(a => a.Health).Where(a => a.IsEnemy
+                return ObjectManager.Get<Obj_AI_Base>().Where(a => a.IsEnemy
                 && a.Type == type
-                && a.Distance(Annie) <= Program.R.Range
+                && a.Distance(Annie.Pet) <= 200
                 && !a.IsDead
                 && !a.IsInvulnerable
-                && a.IsValidTarget(Program.R.Range)
-                && a.Health <= (AnnieCalcs.R(a) - 25)).FirstOrDefault();
+                && a.IsValidTarget(200)).FirstOrDefault();
             }
             else//ignite
             {
@@ -210,6 +209,12 @@ namespace UnsignedAnnie
 
                 if (enemy != null)
                     UseItems();
+            }
+
+            if(GetEnemy(GameObjectType.AIHeroClient, AttackSpell.R) != null
+                && Program.E.IsReady())
+            {
+                Program.E.Cast();
             }
 
             if (IgniteCHECK && Program.Ignite != null && Program.Ignite.IsReady())
