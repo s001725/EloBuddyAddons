@@ -26,7 +26,7 @@ namespace UnsignedAnnie
         //get enemy non last hit)
         public static Obj_AI_Base GetEnemy(float range, GameObjectType type)
         {
-            return ObjectManager.Get<Obj_AI_Base>().Where(a => a.IsEnemy
+            return ObjectManager.Get<Obj_AI_Base>().OrderBy(a => a.Health).Where(a => a.IsEnemy
             && a.Type == type
             && a.Distance(Annie) <= range
             && !a.IsDead
@@ -39,7 +39,7 @@ namespace UnsignedAnnie
             //ksing
             if (spell == AttackSpell.W)//w
             {
-                return ObjectManager.Get<Obj_AI_Base>().Where(a => a.IsEnemy
+                return ObjectManager.Get<Obj_AI_Base>().OrderBy(a => a.Health).Where(a => a.IsEnemy
                 && a.Type == type
                 && a.Distance(Annie) <= Program.W.Range
                 && !a.IsDead
@@ -49,7 +49,7 @@ namespace UnsignedAnnie
             }
             else if (spell == AttackSpell.Q)//q
             {
-                return ObjectManager.Get<Obj_AI_Base>().Where(a => a.IsEnemy
+                return ObjectManager.Get<Obj_AI_Base>().OrderBy(a => a.Health).Where(a => a.IsEnemy
                 && a.Type == type
                 && a.Distance(Annie) <= Program.Q.Range
                 && !a.IsDead
@@ -59,7 +59,7 @@ namespace UnsignedAnnie
             }
             else if (spell == AttackSpell.R)//r
             {
-                return ObjectManager.Get<Obj_AI_Base>().Where(a => a.IsEnemy
+                return ObjectManager.Get<Obj_AI_Base>().OrderBy(a => a.Health).Where(a => a.IsEnemy
                 && a.Type == type
                 && a.Distance(Annie) <= Program.R.Range
                 && !a.IsDead
@@ -69,7 +69,7 @@ namespace UnsignedAnnie
             }
             else//ignite
             {
-                return ObjectManager.Get<Obj_AI_Base>().Where(a => a.IsEnemy
+                return ObjectManager.Get<Obj_AI_Base>().OrderBy(a => a.Health).Where(a => a.IsEnemy
                 && a.Type == type
                 && a.Distance(Annie) <= Program.Ignite.Range
                 && !a.IsDead
@@ -97,14 +97,14 @@ namespace UnsignedAnnie
 
         public static void LaneClear()
         {
-            bool QCHECK = Program.LastHit["LCQ"].Cast<CheckBox>().CurrentValue;
-            bool WCHECK = Program.LastHit["LCW"].Cast<CheckBox>().CurrentValue;
+            bool QCHECK = Program.LaneClear["LCQ"].Cast<CheckBox>().CurrentValue;
+            bool WCHECK = Program.LaneClear["LCW"].Cast<CheckBox>().CurrentValue;
             bool QREADY = Program.Q.IsReady();
             bool WREADY = Program.W.IsReady();
 
             if (QCHECK && QREADY)
             {
-                Obj_AI_Minion enemy = (Obj_AI_Minion)GetEnemy(GameObjectType.obj_AI_Minion, AttackSpell.Q);
+                Obj_AI_Minion enemy = (Obj_AI_Minion)GetEnemy(Program.Q.Range, GameObjectType.obj_AI_Minion);
 
                 if (enemy != null)
                     Program.Q.Cast(enemy);
@@ -112,7 +112,7 @@ namespace UnsignedAnnie
 
             if (WCHECK && WREADY)
             {
-                Obj_AI_Base enemy = GetBestWLocation(GameObjectType.obj_AI_Base);
+                Obj_AI_Base enemy = GetBestWLocation(GameObjectType.obj_AI_Minion);
 
                 if (enemy != null)
                     Program.W.Cast(enemy.Position);
@@ -136,7 +136,7 @@ namespace UnsignedAnnie
 
             if (QCHECK && QREADY)
             {
-                AIHeroClient enemy = (AIHeroClient)GetEnemy(GameObjectType.AIHeroClient, AttackSpell.Q);
+                AIHeroClient enemy = (AIHeroClient)GetEnemy(Program.Q.Range, GameObjectType.AIHeroClient);
 
                 if (enemy != null)
                     Program.Q.Cast(enemy);
@@ -161,12 +161,12 @@ namespace UnsignedAnnie
 
         public static void Combo()
         {
-            bool QCHECK = Program.LastHit["QU"].Cast<CheckBox>().CurrentValue;
-            bool WCHECK = Program.LastHit["WU"].Cast<CheckBox>().CurrentValue;
-            bool ECHECK = Program.LastHit["EU"].Cast<CheckBox>().CurrentValue;
-            bool RCHECK = Program.LastHit["RU"].Cast<CheckBox>().CurrentValue;
-            bool ItemsCHECK = Program.LastHit["IU"].Cast<CheckBox>().CurrentValue;
-            bool IgniteCHECK = Program.LastHit["IgU"].Cast<CheckBox>().CurrentValue;
+            bool QCHECK = Program.ComboMenu["QU"].Cast<CheckBox>().CurrentValue;
+            bool WCHECK = Program.ComboMenu["WU"].Cast<CheckBox>().CurrentValue;
+            bool ECHECK = Program.ComboMenu["EU"].Cast<CheckBox>().CurrentValue;
+            bool RCHECK = Program.ComboMenu["RU"].Cast<CheckBox>().CurrentValue;
+            bool ItemsCHECK = Program.ComboMenu["IU"].Cast<CheckBox>().CurrentValue;
+            bool IgniteCHECK = Program.ComboMenu["IgU"].Cast<CheckBox>().CurrentValue;
             bool QREADY = Program.Q.IsReady();
             bool WREADY = Program.W.IsReady();
             bool EREADY = Program.E.IsReady();
@@ -174,7 +174,7 @@ namespace UnsignedAnnie
 
             if (RCHECK && RREADY)
             {
-                AIHeroClient enemy = (AIHeroClient)GetEnemy(GameObjectType.AIHeroClient, AttackSpell.R);
+                AIHeroClient enemy = (AIHeroClient)GetEnemy(Program.R.Range, GameObjectType.AIHeroClient);
 
                 if (enemy != null)
                     Program.R.Cast(enemy);
@@ -182,7 +182,7 @@ namespace UnsignedAnnie
 
             if (QCHECK && QREADY)
             {
-                AIHeroClient enemy = (AIHeroClient)GetEnemy(GameObjectType.AIHeroClient, AttackSpell.Q);
+                AIHeroClient enemy = (AIHeroClient)GetEnemy(Program.W.Range, GameObjectType.AIHeroClient);
 
                 if (enemy != null)
                     Program.Q.Cast(enemy);
@@ -198,18 +198,10 @@ namespace UnsignedAnnie
 
             if (ECHECK && EREADY)
             {
-                AIHeroClient enemy = (AIHeroClient)GetEnemy(GameObjectType.AIHeroClient, AttackSpell.Q);
+                AIHeroClient enemy = (AIHeroClient)GetEnemy(Program.Q.Range, GameObjectType.AIHeroClient);
 
                 if (enemy != null)
                     Program.E.Cast();
-            }
-            
-            if (Orbwalker.CanAutoAttack)
-            {
-                AIHeroClient enemy = (AIHeroClient)GetEnemy(Annie.GetAutoAttackRange(), GameObjectType.AIHeroClient);
-
-                if (enemy != null)
-                    Orbwalker.ForcedTarget = enemy;
             }
 
             if (ItemsCHECK)
@@ -217,7 +209,7 @@ namespace UnsignedAnnie
                 AIHeroClient enemy = (AIHeroClient)GetEnemy(2500, GameObjectType.AIHeroClient);
 
                 if (enemy != null)
-                    UseItems(enemy);
+                    UseItems();
             }
 
             if (IgniteCHECK && Program.Ignite != null && Program.Ignite.IsReady())
@@ -239,9 +231,13 @@ namespace UnsignedAnnie
 
         public static void StackMode()
         {
-            if(Annie.IsInShopRange())
+            if(Annie.IsInShopRange()
+                && !Annie.HasBuff("pyromania_particle"))
             {
-
+                if (Program.W.IsReady())
+                    Program.W.Cast(Annie.Position);
+                if (Program.E.IsReady())
+                    Program.E.Cast();
             }
         }
 
@@ -250,18 +246,41 @@ namespace UnsignedAnnie
             Orbwalker.MoveTo(Game.CursorPos);
         }
 
-        public static void UseItems(Obj_AI_Base unit)
+        public static void UseItems()
         {
-            if (unit == null)
-                return;
-
             InventorySlot[] items = Annie.InventoryItems;
 
             foreach (InventorySlot item in items)
             {
                 if (item.CanUseItem())
                 {
-
+                    if (item.Id == ItemId.Health_Potion
+                        && Annie.Health <= (Annie.MaxHealth * 0.45)
+                        && !Annie.IsRecalling()
+                        && Annie.CountEnemiesInRange(2000) <= 1
+                        && !Annie.IsInShopRange()
+                        && !Annie.HasBuff("RegenerationPotion"))
+                    {
+                        item.Cast();
+                    }
+                    if (item.Id == ItemId.Mana_Potion
+                        && Annie.Mana <= (Annie.MaxMana * 0.45)
+                        && !Annie.IsRecalling()
+                        && Annie.CountEnemiesInRange(2000) <= 1
+                        && !Annie.IsInShopRange()
+                        && !Annie.HasBuff("FlaskOfCrystalWater"))
+                    {
+                        item.Cast();
+                    }
+                    if (item.Id == ItemId.Crystalline_Flask
+                        && (Annie.Health <= (Annie.MaxHealth * 0.45) || Annie.Mana <= (Annie.MaxMana * 0.45))
+                        && !Annie.IsRecalling()
+                        && Annie.CountEnemiesInRange(2000) <= 1
+                        && !Annie.IsInShopRange()
+                        && !Annie.HasBuff("ItemCrystalFlask"))
+                    {
+                        item.Cast();
+                    }
                 }
             }
         }

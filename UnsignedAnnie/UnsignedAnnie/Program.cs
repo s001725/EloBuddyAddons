@@ -34,7 +34,7 @@ namespace UnsignedAnnie
             Q = new Spell.Targeted(SpellSlot.Q, 625);
             W = new Spell.Skillshot(SpellSlot.W, 625, SkillShotType.Cone);
             E = new Spell.Active(SpellSlot.E);
-            R = new Spell.Targeted(SpellSlot.R, 600);
+            R = new Spell.Targeted(SpellSlot.R, 745);
 
             menu = MainMenu.AddMenu("Unsigned Annie", "UnsignedAnnie");
 
@@ -69,6 +69,7 @@ namespace UnsignedAnnie
             SettingsMenu = menu.AddSubMenu("Settings", "settingsmenu");
             SettingsMenu.AddGroupLabel("Combo Settings");
             SettingsMenu.Add("SS", new CheckBox("Prepare Stun at Base"));
+            SettingsMenu.Add("SHM", new CheckBox("Auto-Use Mana and Health Potions"));
 
             SpellDataInst Sum1 = _Player.Spellbook.GetSpell(SpellSlot.Summoner1);
             SpellDataInst Sum2 = _Player.Spellbook.GetSpell(SpellSlot.Summoner2);
@@ -123,6 +124,10 @@ namespace UnsignedAnnie
             if (Program.SettingsMenu["SS"].Cast<CheckBox>().CurrentValue)
             {
                 AnnieFunctions.StackMode();
+            }
+            if (Program.SettingsMenu["SHM"].Cast<CheckBox>().CurrentValue)
+            {
+                AnnieFunctions.UseItems();
             }
         }
 
