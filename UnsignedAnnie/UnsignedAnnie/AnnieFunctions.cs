@@ -198,8 +198,8 @@ namespace UnsignedAnnie
        
         public static void Harrass()
         {
-            bool QCHECK = Program.LastHit["HQ"].Cast<CheckBox>().CurrentValue;
-            bool WCHECK = Program.LastHit["HW"].Cast<CheckBox>().CurrentValue;
+            bool QCHECK = Program.Harass["HQ"].Cast<CheckBox>().CurrentValue;
+            bool WCHECK = Program.Harass["HW"].Cast<CheckBox>().CurrentValue;
             bool QREADY = Program.Q.IsReady();
             bool WREADY = Program.W.IsReady();
 
